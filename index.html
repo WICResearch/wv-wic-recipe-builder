@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#005671">
+  <meta name="description" content="Turn your West Virginia WIC foods into simple family-friendly meal ideas.">
+  <title>What Can I Make With My WIC? | WV WIC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <img src="assets/wic-logo.png" class="wic-logo" alt="WIC">
+      <div class="header-title"><strong>West Virginia WIC</strong><span>Meal & Recipe Builder</span></div>
+      <button id="restartTop" class="text-button" type="button">Start over</button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section id="hero" class="hero">
+      <img class="hero-food hero-carrot" src="assets/carrot.jpg" alt="" aria-hidden="true">
+      <div class="hero-copy">
+        <span class="eyebrow">YOUR BENEFITS. YOUR FOODS. YOUR TABLE.</span>
+        <h1>What Can I Make<br><em>With My WIC?</em></h1>
+        <p>Choose the WIC foods you have and tell us what works for your family. We'll find simple meal and snack ideas that put your benefits to work.</p>
+        <div class="hero-actions">
+          <button class="button primary" data-go="1">Find My Recipes <span aria-hidden="true">→</span></button>
+          <button class="button secondary" id="surpriseBtn">Surprise Me!</button>
+        </div>
+        <p class="microcopy">No sign-in. No participant information required.</p>
+      </div>
+      <img class="hero-food hero-apple" src="assets/apple.jpg" alt="" aria-hidden="true">
+    </section>
+
+    <section id="builder" class="builder hidden" aria-live="polite">
+      <div class="progress-wrap">
+        <div class="progress-meta"><span id="stepLabel">Step 1 of 4</span><span id="stepName">Your WIC Foods</span></div>
+        <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+      </div>
+
+      <section class="step active" data-step="1">
+        <div class="step-heading"><span class="step-icon">🥕</span><div><h2>What WIC foods do you have?</h2><p>Choose everything you'd like to use. You can pick as many as you want.</p></div></div>
+        <div id="foodGrid" class="choice-grid food-grid"></div>
+        <div class="step-actions"><button class="button primary next" type="button">Next: Preferences →</button></div>
+      </section>
+
+      <section class="step" data-step="2">
+        <div class="step-heading"><span class="step-icon">💗</span><div><h2>What sounds good?</h2><p>Tell us a little about what your household likes.</p></div></div>
+        <h3>Meal or snack</h3><div id="mealGrid" class="pill-grid"></div>
+        <h3>Who are you feeding?</h3><div id="audienceGrid" class="pill-grid"></div>
+        <h3>Anything you'd like to avoid?</h3><div id="avoidGrid" class="pill-grid"></div>
+        <div class="step-actions"><button class="button ghost back" type="button">← Back</button><button class="button primary next" type="button">Next: Your Kitchen →</button></div>
+      </section>
+
+      <section class="step" data-step="3">
+        <div class="step-heading"><span class="step-icon">🍳</span><div><h2>What's cooking at your house?</h2><p>We'll only show ideas that fit your time and equipment.</p></div></div>
+        <h3>How much time do you have?</h3><div id="timeGrid" class="pill-grid"></div>
+        <h3>What can you cook with?</h3><div id="equipmentGrid" class="pill-grid"></div>
+        <label class="pantry-label" for="pantryInput"><strong>Optional: What else do you have?</strong><span>Add pantry foods such as chicken, ground beef, pasta, rice, seasonings, or vegetables.</span></label>
+        <textarea id="pantryInput" rows="3" placeholder="Example: chicken, rice, garlic, cinnamon..."></textarea>
+        <div class="step-actions"><button class="button ghost back" type="button">← Back</button><button class="button primary" id="generateBtn" type="button">Show My Recipes ✨</button></div>
+      </section>
+
+      <section class="step" data-step="4">
+        <div class="results-heading"><div><span class="eyebrow">MADE FOR YOUR SELECTIONS</span><h2>Your recipe ideas</h2><p id="resultSummary"></p></div><button id="editChoices" class="button secondary" type="button">Edit my choices</button></div>
+        <div class="results-toolbar"><button id="moreWic" class="filter-chip active" type="button">Use more WIC foods</button><button id="quickOnly" class="filter-chip" type="button">Quick ideas</button><button id="shuffleResults" class="filter-chip" type="button">Mix it up</button></div>
+        <div id="recipeGrid" class="recipe-grid"></div>
+        <div id="emptyState" class="empty-state hidden"><div class="empty-icon">🍎</div><h3>Let's widen the search.</h3><p>We couldn't find a close match with every filter selected. Try changing your time, equipment, or foods.</p><button class="button primary" id="emptyEdit">Edit my choices</button></div>
+        <div class="step-actions center"><button class="button ghost" id="restartBottom" type="button">Start over</button></div>
+      </section>
+    </section>
+
+    <section class="how-it-works">
+      <span class="eyebrow">SIMPLE BY DESIGN</span><h2>From WIC foods to family meals</h2>
+      <div class="how-grid"><article><b>1</b><h3>Choose your foods</h3><p>Select the WIC foods you already have or want to use.</p></article><article><b>2</b><h3>Make it yours</h3><p>Pick your meal, time, equipment, and household preferences.</p></article><article><b>3</b><h3>Get ideas</h3><p>See easy recipes with WIC foods clearly identified.</p></article></div>
+    </section>
+  </main>
+
+  <dialog id="recipeModal" class="recipe-modal"><div id="modalContent"></div><button class="modal-close" aria-label="Close recipe" type="button">×</button></dialog>
+
+  <footer>
+    <div class="footer-inner"><div><img src="assets/by-your-side.png" class="bys-logo" alt="By Your Side, pregnancy to 5"><p>Recipe ideas are for inspiration and nutrition education. WIC-approved foods depend on your benefit package and the current West Virginia WIC Approved Product List.</p></div><img src="assets/wv-health.jpg" class="health-logo" alt="West Virginia Department of Health"></div>
+    <p class="footer-note">This tool does not determine WIC eligibility or benefits. Check your eWIC balance and current WV WIC guidance when shopping.</p>
+  </footer>
+  <script src="data/foods.js"></script><script src="data/recipes.js"></script><script src="app.js"></script>
+</body>
+</html>
