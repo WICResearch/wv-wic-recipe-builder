@@ -221,3 +221,51 @@ footer{background:#004d61}
   }
 }
 
+/* WIC Recipe Finder - Benefits Section */
+
+.how-it-works {
+  background: #F3F8F9;
+  padding: 75px 25px;
+  text-align: center;
+}
+
+.how-it-works h2 {
+  color: #00657F;
+  margin-bottom: 12px;
+}
+
+.section-intro {
+  color: #60747C;
+  max-width: 600px;
+  margin: 0 auto 35px;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.how-grid article {
+  background: #FFFFFF;
+  border: 1px solid #DFE9EB;
+  border-radius: 18px;
+  padding: 35px 25px;
+  box-shadow: 0 8px 24px rgba(0,65,82,0.04);
+}
+
+.how-grid article .feature-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 20px;
+  border-radius: 16px;
+  background: #FCE8F2;
+  color: #D0006F;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+/* Hide numbering from old layout */
+.how-grid article b {
+  display: none;
+}
+
