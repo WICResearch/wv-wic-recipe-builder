@@ -51,3 +51,69 @@ footer{background:#004d61}
 @media(max-width:850px){.hero-inner{gap:25px;grid-template-columns:1fr 0.8fr}.hero-art{min-height:360px}.art-plate{width:180px;height:180px}}
 @media(max-width:650px){.header-inner{height:78px}.wic-logo{width:62px;height:62px}.header-title strong{font-size:1.05rem}.header-title span{font-size:.8rem}.text-button{padding:8px 11px;font-size:.78rem}.hero{padding:50px 20px 55px;min-height:0}.hero-inner{grid-template-columns:1fr;gap:34px}.hero h1{font-size:clamp(2.7rem,10vw,4rem)}.hero p{font-size:1.04rem}.hero-actions{display:flex;flex-wrap:wrap}.hero .button{width:auto}.hero-art{min-height:250px;padding:25px}.art-plate{width:130px;height:130px;margin:16px 0}.art-note strong{font-size:1.05rem}.art-note span{font-size:.85rem}}
 @media print{.hero-art{display:none!important}}
+
+/* ===== LARGER WV WIC HEADER LOGO ===== */
+
+.site-header .header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1350px;
+  min-height: 140px;
+  height: auto;
+  padding: 15px 35px;
+}
+
+.site-header .brand {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Enlarge the actual logo */
+.site-header .wic-logo {
+  width: 220px !important;
+  height: 115px !important;
+  max-width: none !important;
+  object-fit: contain;
+  object-position: center;
+}
+
+/* Larger, balanced header text */
+.site-header .header-title strong {
+  display: block;
+  font-size: 1.65rem;
+  line-height: 1.2;
+}
+
+.site-header .header-title span {
+  display: block;
+  font-size: 1.15rem;
+  margin-top: 5px;
+}
+
+/* Mobile adjustments */
+@media (max-width: 650px) {
+  .site-header .header-inner {
+    min-height: 95px;
+    padding: 12px 15px;
+  }
+
+  .site-header .brand {
+    gap: 10px;
+  }
+
+  .site-header .wic-logo {
+    width: 115px !important;
+    height: 75px !important;
+  }
+
+  .site-header .header-title strong {
+    font-size: 1rem;
+  }
+
+  .site-header .header-title span {
+    font-size: 0.85rem;
+  }
+}
+
