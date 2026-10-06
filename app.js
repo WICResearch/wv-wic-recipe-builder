@@ -45,7 +45,7 @@ $('#foodGrid').innerHTML = WIC_FOODS.map(f => `
   >
     <span class="food-photo-wrap">
       <img
-        src="assets/foods/${f.id}.jpg"
+       src="assets/${f.id}.jpg"
         alt=""
         class="food-photo"
         loading="lazy"
