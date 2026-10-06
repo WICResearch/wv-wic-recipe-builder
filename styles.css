@@ -169,3 +169,55 @@ footer{background:#004d61}
   }
 }
 
+/* WV WIC Recipe Finder - Homepage Steps */
+
+.recipe-preview {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 35px auto;
+}
+
+.preview-step {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 21px 24px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 16px;
+  text-align: left;
+}
+
+.preview-number {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #00CFA6;
+}
+
+.preview-step strong {
+  display: block;
+  color: #FFFFFF;
+  font-size: 1.05rem;
+  margin-bottom: 5px;
+}
+
+.preview-step small {
+  display: block;
+  color: #E0F2F3;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 650px) {
+  .recipe-preview {
+    margin: 22px auto;
+  }
+
+  .preview-step {
+    padding: 15px 18px;
+  }
+}
+
