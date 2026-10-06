@@ -35,7 +35,34 @@ const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const state={step:1,foods:new Set(),meal:new Set(),audience:new Set(),avoid:new Set(),time:null,equipment:new Set(),pantry:'',moreWic:true,quick:false};
 const labels={1:'Your WIC Foods',2:'Preferences',3:'Your Kitchen',4:'Recipe Ideas'};
 function build(){
- $('#foodGrid').innerHTML=WIC_FOODS.map(f=>`<button class="choice-card" type="button" data-food="${f.id}" aria-pressed="false"><span class="choice-icon">${f.icon}</span><strong>${f.name}</strong><small>${f.sub}</small></button>`).join('');
+
+$('#foodGrid').innerHTML = WIC_FOODS.map(f => `
+  <button
+    class="choice-card editorial-food-card"
+    type="button"
+    data-food="${f.id}"
+    aria-pressed="false"
+  >
+    <span class="food-photo-wrap">
+      <img
+        src="assets/foods/${f.id}.jpg"
+        alt=""
+        class="food-photo"
+        loading="lazy"
+        onerror="this.style.display='none'"
+      >
+      <span class="food-selected-check" aria-hidden="true">
+        ✓
+      </span>
+    </span>
+
+    <span class="food-card-details">
+      <strong>${f.name}</strong>
+      <small>${f.sub}</small>
+    </span>
+  </button>
+`).join('');
+
  makePills('#mealGrid',WIC_OPTIONS.meals,'meal',true); makePills('#audienceGrid',WIC_OPTIONS.audiences,'audience',true); makePills('#avoidGrid',WIC_OPTIONS.avoids,'avoid',true); makePills('#timeGrid',WIC_OPTIONS.times,'time',false); makePills('#equipmentGrid',WIC_OPTIONS.equipment,'equipment',true);
 }
 function makePills(sel,items,key,multi){$(sel).innerHTML=items.map(x=>`<button type="button" class="pill" data-key="${key}" data-value="${x}" data-multi="${multi}" aria-pressed="false">${x}</button>`).join('')}
