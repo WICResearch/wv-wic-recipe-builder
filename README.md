@@ -60,3 +60,12 @@ Add or remove recipes without changing `app.js`.
 3. Decide whether to add analytics. This version intentionally collects no participant data and sends nothing to a server.
 4. Keep `data/foods.js` aligned with future APL/category changes.
 5. Consider adding Spanish-language content in a later release.
+
+## Chloe's workbook integration (October 2026)
+- `data/catalog.js` includes 235 ingredient records, 28 shopping-rule summaries, and six **draft** recipes from the shared workbook.
+- Recipe detail views display relevant shopping guidance from these reference records.
+- The original starter recipes remain live. Chloe's drafts are **not published as complete recipes**, because recipe ingredient links, quantities and directions are not yet populated.
+- All ingredient approvals and rule descriptions require WV WIC staff review; a matching category is **not** confirmation of eligibility.
+- Changes in Excel do **not** automatically synchronize to GitHub. Re-export/rebuild `data/catalog.js` when the workbook changes.
+- Replace existing repository files with the contents of this package, preserving the `data/` and `assets/` folders. Do not upload the outer directory as a nested folder.
+- Dietary filtering is a convenience, not an allergy-safety guarantee. Verify ingredient labels, substitutions, and cross-contact before cooking.
