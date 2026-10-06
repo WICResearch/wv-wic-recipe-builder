@@ -269,3 +269,493 @@ footer{background:#004d61}
   display: none;
 }
 
+
+/* =========================================
+   WV WIC RECIPE FINDER
+   EDITORIAL DESIGN SYSTEM
+   ========================================= */
+
+:root {
+  --wic-teal: #00657F;
+  --wic-magenta: #D0006F;
+  --wic-green: #006B4F;
+  --wic-mint: #00CFA6;
+  --wic-blue: #00A9CE;
+  --wic-orange: #FFAE00;
+
+  --wic-cream: #FAFAF7;
+  --wic-paper: #FFFFFF;
+  --wic-ink: #17323D;
+  --wic-muted: #60747C;
+  --wic-border: #E2E9E7;
+}
+
+/* GENERAL APPEARANCE */
+
+body {
+  background: var(--wic-cream);
+  color: var(--wic-ink);
+  font-family: "Nunito", Arial, sans-serif;
+}
+
+h1, h2, h3 {
+  letter-spacing: -0.025em;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* BUILDER CONTAINER */
+
+.builder {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 38px 28px 80px;
+}
+
+/* PROGRESS INDICATOR */
+
+.progress-wrap {
+  background: #FFFFFF;
+  border: 1px solid var(--wic-border);
+  border-radius: 18px;
+  padding: 22px 26px;
+  margin-bottom: 35px;
+}
+
+.progress-meta {
+  color: var(--wic-teal);
+  font-weight: 800;
+}
+
+.progress-track {
+  background: #E5EFED;
+  height: 8px;
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  background: linear-gradient(
+    90deg,
+    var(--wic-teal),
+    var(--wic-mint)
+  );
+  border-radius: 100px;
+}
+
+/* STEP HEADINGS */
+
+.step-heading {
+  margin-bottom: 32px;
+}
+
+.step-heading h2,
+.results-heading h2 {
+  color: var(--wic-teal);
+  font-size: clamp(1.7rem, 3vw, 2.35rem);
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.step-heading p,
+.results-heading p {
+  color: var(--wic-muted);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.step-icon {
+  display: none;
+}
+
+/* =========================================
+   EDITORIAL FOOD SELECTION CARDS
+   ========================================= */
+
+.food-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.food-grid .editorial-food-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  padding: 8px;
+
+  background: #FFFFFF;
+  border: 2px solid var(--wic-border);
+  border-radius: 17px;
+
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+
+  box-shadow: 0 6px 20px rgba(0,65,82,.035);
+
+  transition:
+    transform .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease;
+}
+
+.food-grid .editorial-food-card:hover {
+  transform: translateY(-3px);
+  border-color: #9BBEC3;
+  box-shadow: 0 14px 30px rgba(0,65,82,.09);
+}
+
+/* REAL FOOD PHOTOGRAPHY */
+
+.food-photo-wrap {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 5 / 3;
+
+  overflow: hidden;
+  border-radius: 11px;
+
+  background: #F1F1EB;
+}
+
+.food-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* FOOD NAMES */
+
+.food-card-details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 16px 11px 17px;
+}
+
+.food-card-details strong {
+  display: block;
+  color: var(--wic-ink);
+  font-size: 1.08rem;
+  font-weight: 900;
+  line-height: 1.3;
+}
+
+.food-card-details small {
+  display: block;
+  color: var(--wic-muted);
+  font-size: .86rem;
+  line-height: 1.5;
+}
+
+/* SELECTED FOOD INDICATOR */
+
+.food-selected-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  width: 32px;
+  height: 32px;
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  background: var(--wic-magenta);
+  color: #FFFFFF;
+
+  font-size: 19px;
+  font-weight: 900;
+  box-shadow: 0 3px 12px rgba(0,0,0,.12);
+}
+
+.food-grid .editorial-food-card.selected,
+.food-grid .editorial-food-card[aria-pressed="true"] {
+  border-color: var(--wic-magenta);
+  background: #FFFFFF;
+  box-shadow: 0 9px 25px rgba(208,0,111,.09);
+}
+
+.editorial-food-card.selected .food-selected-check,
+.editorial-food-card[aria-pressed="true"]
+.food-selected-check {
+  display: flex;
+}
+
+.editorial-food-card:focus-visible {
+  outline: 3px solid var(--wic-teal);
+  outline-offset: 3px;
+}
+
+/* =========================================
+   PREFERENCES AND KITCHEN OPTIONS
+   ========================================= */
+
+.step h3 {
+  color: var(--wic-teal);
+  font-weight: 900;
+  margin-top: 28px;
+}
+
+.pill-grid {
+  gap: 12px;
+}
+
+.pill {
+  background: #FFFFFF;
+  border: 1.5px solid var(--wic-border);
+  border-radius: 12px;
+  padding: 13px 19px;
+
+  color: var(--wic-ink);
+  font-weight: 800;
+
+  transition: all .2s ease;
+}
+
+.pill:hover {
+  border-color: var(--wic-teal);
+  background: #F3F8F9;
+}
+
+.pill.selected,
+.pill[aria-pressed="true"] {
+  background: #FFF1F8;
+  border-color: var(--wic-magenta);
+  color: #A60059;
+}
+
+.pantry-label {
+  color: var(--wic-ink);
+}
+
+#pantryInput {
+  background: #FFFFFF;
+  border: 1.5px solid var(--wic-border);
+  border-radius: 14px;
+  padding: 17px;
+  font: inherit;
+  color: var(--wic-ink);
+}
+
+#pantryInput:focus {
+  outline: 2px solid var(--wic-teal);
+  outline-offset: 2px;
+}
+
+/* =========================================
+   BUTTONS
+   ========================================= */
+
+.button {
+  border-radius: 12px;
+  padding: 15px 25px;
+  font-weight: 900;
+  transition: all .2s ease;
+}
+
+.button.primary {
+  background: var(--wic-magenta);
+  color: #FFFFFF;
+  border: 2px solid var(--wic-magenta);
+  box-shadow: 0 7px 18px rgba(208,0,111,.12);
+}
+
+.button.primary:hover {
+  background: #AD005C;
+  border-color: #AD005C;
+}
+
+.button.secondary {
+  background: #FFFFFF;
+  color: var(--wic-teal);
+  border: 1.5px solid #B9D0D5;
+}
+
+.button.secondary:hover {
+  background: #F3F8F9;
+}
+
+.button.ghost {
+  color: var(--wic-teal);
+}
+
+/* =========================================
+   RECIPE RESULTS
+   ========================================= */
+
+.recipe-grid {
+  gap: 24px;
+}
+
+.recipe-card {
+  overflow: hidden;
+  border: 1px solid var(--wic-border);
+  border-radius: 20px;
+  background: #FFFFFF;
+
+  box-shadow: 0 8px 28px rgba(0,65,82,.055);
+  transition: transform .2s ease;
+}
+
+.recipe-card:hover {
+  transform: translateY(-3px);
+}
+
+.recipe-top {
+  background: linear-gradient(
+    135deg,
+    #EAF5F2,
+    #F9FAF6
+  );
+  min-height: 155px;
+}
+
+.recipe-body {
+  padding: 23px;
+}
+
+.recipe-body h3 {
+  color: var(--wic-teal);
+  font-size: 1.25rem;
+  font-weight: 900;
+}
+
+.recipe-desc {
+  color: var(--wic-muted);
+  line-height: 1.6;
+}
+
+.recipe-meta {
+  color: var(--wic-muted);
+}
+
+.wic-tag {
+  background: #EAF5F0;
+  color: var(--wic-green);
+  border-radius: 7px;
+  font-size: .8rem;
+  font-weight: 800;
+}
+
+.match-badge {
+  background: var(--wic-green);
+  color: #FFFFFF;
+}
+
+.filter-chip {
+  background: #FFFFFF;
+  border: 1px solid var(--wic-border);
+  border-radius: 100px;
+}
+
+.filter-chip.active {
+  background: var(--wic-teal);
+  color: #FFFFFF;
+}
+
+/* =========================================
+   RECIPE DETAILS
+   ========================================= */
+
+.recipe-modal {
+  border: 1px solid var(--wic-border);
+  border-radius: 22px;
+  box-shadow: 0 30px 80px rgba(0,40,50,.2);
+}
+
+.modal-inner h2 {
+  color: var(--wic-teal);
+  font-weight: 900;
+}
+
+.modal-inner h3 {
+  color: var(--wic-teal);
+}
+
+.ingredient-list li,
+.direction-list li {
+  line-height: 1.75;
+}
+
+.shopping-reference {
+  background: #F3F8F9;
+  border: 1px solid #D9E6E9;
+  border-radius: 14px;
+  padding: 20px;
+}
+
+/* =========================================
+   MOBILE AND TABLET
+   ========================================= */
+
+@media (max-width: 1000px) {
+  .food-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 650px) {
+  .builder {
+    padding: 22px 15px 55px;
+  }
+
+  .food-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .food-grid .editorial-food-card {
+    padding: 6px;
+    border-radius: 14px;
+  }
+
+  .food-card-details {
+    padding: 11px 8px 13px;
+  }
+
+  .food-card-details strong {
+    font-size: .98rem;
+  }
+
+  .food-card-details small {
+    font-size: .78rem;
+  }
+
+  .food-selected-check {
+    width: 27px;
+    height: 27px;
+    font-size: 16px;
+  }
+
+  .step-heading h2 {
+    font-size: 1.65rem;
+  }
+
+  .progress-wrap {
+    padding: 16px;
+  }
+
+  .recipe-body {
+    padding: 18px;
+  }
+}
+
+@media (max-width: 350px) {
+  .food-grid {
+    grid-template-columns: 1fr;
+  }
+}
