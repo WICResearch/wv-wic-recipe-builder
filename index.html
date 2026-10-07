@@ -13,13 +13,32 @@
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to main content</a>
-  <header class="site-header">
-    <div class="header-inner">
+ <header class="site-header">
+  <div class="header-inner">
+
+    <div class="header-brand">
       <img src="assets/wic-logo.png" class="wic-logo" alt="WIC">
-      <div class="header-title"><strong>West Virginia WIC</strong><span>Recipe Finder</span></div>
-      <button id="restartTop" class="text-button" type="button">Start over</button>
+
+      <div class="header-title">
+        <strong>West Virginia WIC</strong>
+        <span>Recipe Finder</span>
+      </div>
     </div>
-  </header>
+
+    <div class="header-right">
+      <button id="restartTop" class="text-button" type="button">
+        Start over
+      </button>
+
+      <img
+        src="assets/wv-health.jpg"
+        class="header-health-logo"
+        alt="West Virginia Department of Health"
+      >
+    </div>
+
+  </div>
+</header>
 
   <main id="main">
     <section id="hero" class="hero">
@@ -149,9 +168,22 @@
   <dialog id="recipeModal" class="recipe-modal"><div id="modalContent"></div><button class="modal-close" aria-label="Close recipe" type="button">×</button></dialog>
 
   <footer>
-    <div class="footer-inner"><div><img src="assets/by-your-side.png" class="bys-logo" alt="By Your Side, pregnancy to 5"><p>Recipe ideas are for inspiration and nutrition education. WIC-approved foods depend on your benefit package and the current West Virginia WIC Approved Product List.</p></div><img src="assets/wv-health.jpg" class="health-logo" alt="West Virginia Department of Health"></div>
-    <p class="footer-note">This tool does not determine WIC eligibility or benefits. Check your eWIC balance and current WV WIC guidance when shopping.</p>
-  </footer>
+  <div class="footer-inner">
+    <div>
+      <img src="assets/by-your-side.png" class="bys-logo" alt="By Your Side, pregnancy to 5">
+      <p>
+        Recipe ideas are for inspiration and nutrition education.
+        WIC-approved foods depend on your benefit package and the current
+        West Virginia WIC Approved Product List.
+      </p>
+    </div>
+  </div>
+
+  <p class="footer-note">
+    This tool does not determine WIC eligibility or benefits.
+    Check your eWIC balance and current WV WIC guidance when shopping.
+  </p>
+</footer>
   <script src="data/foods.js"></script><script src="data/recipes.js"></script>
 <script src="data/catalog.js"></script><script src="app.js"></script>
 </body>
