@@ -242,7 +242,7 @@ function addShoppingRules(recipe) {
 
   const description = document.createElement('p');
   description.textContent =
-    'Category guidance only — products, sizes and benefits must be checked against the current approved list. The imported rules and ingredient matches still need WIC staff verification.';
+    'Category guidance only — products, sizes and benefits must be checked against the current approved list. Always check the current approved food list for eligible products and package sizes.';
 
   box.appendChild(description);
 
@@ -487,10 +487,20 @@ function timeLimit() {
   return 999;
 }
 
+function totalMinutes(recipe) {
+  return recipe.totalTime ?? recipe.time;
+}
+
+function pantryWords() {
+  return state.pantry.toLowerCase().split(/[,;\n]+/).map(x => x.trim()).filter(x => x.length >= 2);
+}
+
+function pantryMatches(recipe) {
+  const names = recipe.ingredients.map(([name]) => name.toLowerCase());
+  return pantryWords().filter(word => names.some(name => name.includes(word))).length;
+}
+
 function allowed(recipe) {
-  const ingredients = recipe.ingredients
-    .map(item => String(item[0]).toLowerCase())
-    .join(' ');
 
   if (
     state.meal.size &&
@@ -507,43 +517,12 @@ function allowed(recipe) {
     !recipe.equipment.some(value => state.equipment.has(value))
   ) return false;
 
-  if (recipe.time > timeLimit()) return false;
-  if (state.quick && recipe.time > 15) return false;
+  if (totalMinutes(recipe) > timeLimit()) return false;
+  if (state.quick && totalMinutes(recipe) > 15) return false;
 
+  // Recipe-level dietary labels are curated; never infer allergens from substrings.
   for (const avoid of state.avoid) {
-    if (
-      avoid === 'No peanut butter' &&
-      (
-        recipe.wic.includes('peanutbutter') ||
-        /peanut|groundnut/.test(ingredients)
-      )
-    ) return false;
-
-    if (
-      avoid === 'No dairy' &&
-      (
-        recipe.wic.some(value =>
-          ['milk', 'cheese', 'yogurt'].includes(value)
-        ) ||
-        /milk|cheese|yogurt|butter|cream|whey/.test(ingredients)
-      )
-    ) return false;
-
-    if (
-      avoid === 'No fish' &&
-      (
-        recipe.wic.includes('fish') ||
-        /tuna|salmon|fish|anchov|mackerel/.test(ingredients)
-      )
-    ) return false;
-
-    if (
-      avoid === 'Vegetarian' &&
-      (
-        recipe.wic.includes('fish') ||
-        /chicken|beef|pork|tuna|salmon|fish|broth/.test(ingredients)
-      )
-    ) return false;
+    if (avoid !== 'No preference' && !recipe.avoid.includes(avoid)) return false;
   }
 
   return true;
@@ -562,7 +541,8 @@ function score(recipe) {
     match * 10 -
     missing * 2 +
     (state.moreWic ? recipe.wic.length : 0) -
-    recipe.time / 100
+    totalMinutes(recipe) / 100 +
+    pantryMatches(recipe) * 12
   );
 }
 
@@ -575,6 +555,7 @@ function generate() {
 }
 
 function renderRecipes(shuffle = false) {
+  state.pantry = $('#pantryInput').value.trim();
   let recipes = WIC_RECIPES
     .filter(allowed)
     .map(recipe => ({
@@ -612,8 +593,8 @@ function renderRecipes(shuffle = false) {
     .filter(Boolean);
 
   $('#resultSummary').textContent = selected.length
-    ? `Using your selections: ${selected.join(', ')}.`
-    : 'Showing flexible WIC-friendly ideas. Choose foods to personalize your matches.';
+    ? `Using your selections: ${selected.join(', ')}.${state.pantry ? ' Prioritizing recipes with: ' + state.pantry + '.' : ''}`
+    : `Showing flexible WIC-friendly ideas.${state.pantry ? ' Prioritizing recipes with: ' + state.pantry + '.' : ' Choose foods to personalize your matches.'}`;
 
   refreshIcons();
 }
@@ -627,9 +608,9 @@ function card(recipe) {
     return `<span class="wic-tag">${escapeHTML(name)}</span>`;
   }).join('');
 
-  const percent = state.foods.size
-    ? Math.round(recipe._match / recipe.wic.length * 100)
-    : 100;
+  const matchText = state.foods.size
+    ? `${recipe._match} of ${recipe.wic.length} WIC food groups selected`
+    : '';
 
   return `
     <article class="recipe-card">
@@ -637,9 +618,7 @@ function card(recipe) {
       <div class="recipe-top">
         ${photoMarkup(recipe)}
 
-        <span class="match-badge">
-          ${percent}% WIC match
-        </span>
+        ${matchText ? `<span class="match-badge">${escapeHTML(matchText)}</span>` : ''}
       </div>
 
       <div class="recipe-body">
@@ -654,7 +633,7 @@ function card(recipe) {
 
           <span>
             ${ICONS.clock}
-            ${recipe.time} min
+            ${totalMinutes(recipe)} min total
           </span>
 
           <span>
@@ -728,7 +707,7 @@ function openRecipe(id) {
 
         <span>
           ${ICONS.clock}
-          ${recipe.time} minutes
+          ${totalMinutes(recipe)} minutes total (prep: ${recipe.time} min)
         </span>
 
         <span>
@@ -829,7 +808,8 @@ document.addEventListener('click', event => {
   }
 
   if (button.id === 'surpriseBtn') {
-    state.foods = new Set(WIC_FOODS.map(food => food.id));
+    state.foods.clear();
+    $('.choice-card').forEach(card => { card.classList.remove('selected'); card.setAttribute('aria-pressed', 'false'); });
     showBuilder();
     go(4);
     renderRecipes(true);
