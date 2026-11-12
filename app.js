@@ -837,8 +837,28 @@ document.addEventListener('click', event => {
   }
 
   if (button.id === 'surpriseBtn') {
+    // Explore all ideas without inheriting hidden selections or restrictive filters.
     state.foods.clear();
-    $('.choice-card').forEach(card => { card.classList.remove('selected'); card.setAttribute('aria-pressed', 'false'); });
+    state.meal.clear();
+    state.audience.clear();
+    state.avoid.clear();
+    state.equipment.clear();
+    state.time = null;
+    state.pantry = '';
+    state.search = '';
+    state.sort = 'best';
+    state.quick = false;
+    state.moreWic = true;
+    state.visibleCount = 12;
+    $('.choice-card, .pill').forEach(card => {
+      card.classList.remove('selected');
+      card.setAttribute('aria-pressed', 'false');
+    });
+    $('#pantryInput').value = '';
+    $('#recipeSearch').value = '';
+    $('#recipeSort').value = 'best';
+    $('#quickOnly').classList.remove('active');
+    $('#moreWic').classList.add('active');
     showBuilder();
     go(4);
     renderRecipes(true);
