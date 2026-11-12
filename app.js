@@ -488,6 +488,7 @@ function timeLimit() {
 }
 
 function totalMinutes(recipe) {
+  if (recipe.slowCookerTotalTime && state.equipment.has('Slow cooker') && !state.equipment.has('Stovetop')) return recipe.slowCookerTotalTime;
   return recipe.totalTime ?? recipe.time;
 }
 
@@ -707,7 +708,7 @@ function openRecipe(id) {
 
         <span>
           ${ICONS.clock}
-          ${totalMinutes(recipe)} minutes total (prep: ${recipe.time} min)
+          ${totalMinutes(recipe)} minutes total (prep: ${recipe.time} min)${recipe.slowCookerTotalTime ? ' · Slow cooker: 4–8 hours' : ''}
         </span>
 
         <span>
