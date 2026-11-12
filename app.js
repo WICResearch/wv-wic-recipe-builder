@@ -30,7 +30,10 @@ const state = {
   equipment: new Set(),
   pantry: '',
   moreWic: true,
-  quick: false
+  quick: false,
+  search: '',
+  sort: 'best',
+  visibleCount: 12
 };
 
 const labels = {
@@ -383,8 +386,11 @@ function reset() {
   state.pantry = '';
   state.moreWic = true;
   state.quick = false;
+  state.search = '';
+  state.sort = 'best';
+  state.visibleCount = 12;
 
-  $$('.selected').forEach(element => {
+  $('.selected').forEach(element => {
     element.classList.remove('selected');
   });
 
@@ -550,6 +556,7 @@ function score(recipe) {
 /* GENERATE RECIPES */
 
 function generate() {
+  state.visibleCount = 12;
   state.pantry = $('#pantryInput').value.trim();
   go(4);
   renderRecipes();
@@ -557,46 +564,62 @@ function generate() {
 
 function renderRecipes(shuffle = false) {
   state.pantry = $('#pantryInput').value.trim();
+  const query = state.search.trim().toLowerCase();
   let recipes = WIC_RECIPES
     .filter(allowed)
+    .filter(recipe => !query || [
+      recipe.title, recipe.desc, ...(recipe.ingredients || []).map(item => item[0])
+    ].join(' ').toLowerCase().includes(query))
     .map(recipe => ({
       ...recipe,
       _score: score(recipe),
-      _match: recipe.wic.filter(
-        value => state.foods.has(value)
-      ).length
+      _match: recipe.wic.filter(value => state.foods.has(value)).length
     }));
 
-  if (state.foods.size) {
-    recipes = recipes.filter(recipe => recipe._match > 0);
-  }
+  if (state.foods.size) recipes = recipes.filter(recipe => recipe._match > 0);
 
-  recipes.sort((a, b) => b._score - a._score);
+  const sorters = {
+    fastest: (a, b) => totalMinutes(a) - totalMinutes(b) || a.title.localeCompare(b.title),
+    name: (a, b) => a.title.localeCompare(b.title),
+    best: (a, b) => b._score - a._score || a.title.localeCompare(b.title)
+  };
+  recipes.sort(sorters[state.sort] || sorters.best);
 
   if (shuffle) {
     for (let i = recipes.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [recipes[i], recipes[j]] = [recipes[j], recipes[i]];
     }
+  } else if (state.sort === 'best' && !query) {
+    // Distribute recipe families through the results so similar variants
+    // don't crowd out different meal ideas.
+    const seen = new Set();
+    const distinct = [], repeats = [];
+    for (const recipe of recipes) {
+      const family = recipe.id.startsWith('expanded-')
+        ? recipe.title.replace(/^(Apple Cinnamon|Peach Vanilla|Strawberry Banana|Pear Ginger|Blueberry Banana|Peach|Apple|Strawberry|Spinach Mushroom|Broccoli Pepper|Tomato Zucchini|Sweet Potato Onion|Black Bean Pepper|Pinto Bean Corn|White Bean Spinach|Lentil Tomato|Black Bean Corn|Pinto Bean Pepper|Lentil Zucchini|Carrot White Bean|Tomato Pinto Bean|Zucchini Black Bean|Broccoli Lentil|Broccoli Garlic|Zucchini Tomato|Spinach Pepper|Mushroom Peas|Pinto Bean Tomato|Lentil Broccoli|Banana Strawberry|Peach Blueberry|Mango Banana|Pineapple Berry|Carrot Broccoli|Cauliflower Pepper|Sweet Potato Onion|Zucchini Mushroom|Banana Cinnamon|White Bean Carrot|Chickpea Cucumber|Black Bean Tomato|Spinach Tomato|Pepper Onion|Mushroom Spinach|Broccoli Tomato) /, '')
+        : recipe.id;
+      if (seen.has(family)) repeats.push(recipe);
+      else { seen.add(family); distinct.push(recipe); }
+    }
+    recipes = distinct.concat(repeats);
   }
 
-  recipes = recipes.slice(0, 12);
-
-  $('#recipeGrid').innerHTML = recipes.map(card).join('');
-
-  $('#emptyState').classList.toggle(
-    'hidden',
-    recipes.length > 0
-  );
+  const total = recipes.length;
+  const visible = recipes.slice(0, state.visibleCount);
+  $('#recipeGrid').innerHTML = visible.map(card).join('');
+  $('#emptyState').classList.toggle('hidden', total > 0);
+  $('#recipeCount').textContent = total
+    ? `Showing ${visible.length} of ${total} matching recipes`
+    : 'No matching recipes';
+  $('#loadMoreRecipes').hidden = visible.length >= total;
 
   const selected = [...state.foods]
     .map(id => WIC_FOODS.find(food => food.id === id)?.name)
     .filter(Boolean);
-
   $('#resultSummary').textContent = selected.length
     ? `Using your selections: ${selected.join(', ')}.${state.pantry ? ' Prioritizing recipes with: ' + state.pantry + '.' : ''}`
-    : `Showing flexible WIC-friendly ideas.${state.pantry ? ' Prioritizing recipes with: ' + state.pantry + '.' : ' Choose foods to personalize your matches.'}`;
-
+    : `Browse WIC-food recipe ideas.${state.pantry ? ' Prioritizing recipes with: ' + state.pantry + '.' : ''} Choose foods to personalize your matches.`;
   refreshIcons();
 }
 
@@ -808,6 +831,11 @@ document.addEventListener('click', event => {
     showBuilder();
   }
 
+  if (button.id === 'loadMoreRecipes') {
+    state.visibleCount += 12;
+    renderRecipes();
+  }
+
   if (button.id === 'surpriseBtn') {
     state.foods.clear();
     $('.choice-card').forEach(card => { card.classList.remove('selected'); card.setAttribute('aria-pressed', 'false'); });
@@ -886,3 +914,15 @@ $('#recipeModal').addEventListener('click', event => {
 addVisualStyles();
 build();
 refreshIcons();
+
+// Results discovery controls: search, sorting and incremental browsing.
+document.getElementById('recipeSearch')?.addEventListener('input', event => {
+  state.search = event.target.value;
+  state.visibleCount = 12;
+  renderRecipes();
+});
+document.getElementById('recipeSort')?.addEventListener('change', event => {
+  state.sort = event.target.value;
+  state.visibleCount = 12;
+  renderRecipes();
+});
