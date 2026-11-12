@@ -708,7 +708,7 @@ function openRecipe(id) {
 
         <span>
           ${ICONS.clock}
-          ${totalMinutes(recipe)} minutes total (prep: ${recipe.time} min)${recipe.slowCookerTotalTime ? ' · Slow cooker: 4–8 hours' : ''}
+          ${totalMinutes(recipe)} minutes total${recipe.totalTime && recipe.totalTime > recipe.time ? ` (about ${recipe.time} minutes active preparation)` : ''}${recipe.slowCookerTotalTime ? ' · Slow cooker: 4–8 hours' : ''}
         </span>
 
         <span>
