@@ -80,6 +80,23 @@ function recipeImage(recipe) {
     `assets/recipes/${encodeURIComponent(recipe.id)}.jpg`;
 }
 
+function recipeFallbackImage(recipe) {
+  const title = (recipe.title || '').toLowerCase();
+  const categories = recipe.wic || [];
+  if (/smoothie|drink/.test(title)) return 'assets/milk.jpg';
+  if (/oatmeal|oats|pancake|muffin|toast|sandwich|bread/.test(title)) return 'assets/cereal.jpg';
+  if (/parfait|yogurt|berry|fruit|apple|peach|pear|banana/.test(title)) return 'assets/fruit.jpg';
+  if (/tuna|salmon|fish/.test(title)) return 'assets/fish.jpg';
+  if (/egg|scramble|frittata/.test(title)) return 'assets/eggs.jpg';
+  if (/bean|lentil|chili|taco|burrito|quesadilla/.test(title)) return 'assets/beans.jpg';
+  if (/cheese|macaroni/.test(title)) return 'assets/cheese.jpg';
+  if (/carrot|sweet potato/.test(title)) return 'assets/carrot.jpg';
+  if (categories.includes('vegetables')) return 'assets/vegetables.jpg';
+  if (categories.includes('fruit')) return 'assets/fruit.jpg';
+  if (categories.includes('beans')) return 'assets/beans.jpg';
+  return 'assets/vegetables.jpg';
+}
+
 function photoMarkup(recipe, className = 'recipe-photo') {
   const title = escapeHTML(recipe.title);
   const src = escapeHTML(recipeImage(recipe));
@@ -95,7 +112,7 @@ function photoMarkup(recipe, className = 'recipe-photo') {
         alt="${title}"
         class="${className}"
         loading="lazy"
-        onerror="this.hidden=true"
+        onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='${escapeHTML(recipeFallbackImage(recipe))}';}else{this.hidden=true}"
         onload="this.previousElementSibling.hidden=true"
       >
     </div>
