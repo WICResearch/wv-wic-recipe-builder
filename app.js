@@ -524,7 +524,17 @@ function pantryMatches(recipe) {
   return pantryWords().filter(word => names.some(name => name.includes(word))).length;
 }
 
+function hasSelectedWicFoods(recipe) {
+  // A recipe is eligible only when EVERY WIC food group it uses was selected.
+  // Pantry seasonings and other non-WIC extras remain visible in ingredients.
+  // With no selected foods, the visitor may browse the full collection.
+  return state.foods.size === 0 ||
+    (Array.isArray(recipe.wic) && recipe.wic.length > 0 &&
+      recipe.wic.every(group => state.foods.has(group)));
+}
+
 function allowed(recipe) {
+  if (!hasSelectedWicFoods(recipe)) return false;
 
   if (
     state.meal.size &&
@@ -593,7 +603,6 @@ function renderRecipes(shuffle = false) {
       _match: recipe.wic.filter(value => state.foods.has(value)).length
     }));
 
-  if (state.foods.size) recipes = recipes.filter(recipe => recipe._match > 0);
 
   const sorters = {
     fastest: (a, b) => totalMinutes(a) - totalMinutes(b) || a.title.localeCompare(b.title),
@@ -635,7 +644,7 @@ function renderRecipes(shuffle = false) {
     .map(id => WIC_FOODS.find(food => food.id === id)?.name)
     .filter(Boolean);
   $('#resultSummary').textContent = selected.length
-    ? `Using your selections: ${selected.join(', ')}.${state.pantry ? ' Prioritizing recipes with: ' + state.pantry + '.' : ''}`
+    ? `Showing recipes using only your selected WIC food groups: ${selected.join(', ')}.${state.pantry ? ' Prioritizing recipes with: ' + state.pantry + '.' : ''} Other pantry ingredients may still be needed.`
     : `Browse WIC-food recipe ideas.${state.pantry ? ' Prioritizing recipes with: ' + state.pantry + '.' : ''} Choose foods to personalize your matches.`;
   refreshIcons();
 }
@@ -650,7 +659,7 @@ function card(recipe) {
   }).join('');
 
   const matchText = state.foods.size
-    ? `${recipe._match} of ${recipe.wic.length} WIC food groups selected`
+    ? `Uses ${recipe.wic.length} of your selected WIC food groups`
     : '';
 
   return `
