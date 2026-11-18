@@ -525,12 +525,13 @@ function pantryMatches(recipe) {
 }
 
 function hasSelectedWicFoods(recipe) {
-  // A recipe is eligible only when EVERY WIC food group it uses was selected.
-  // Pantry seasonings and other non-WIC extras remain visible in ingredients.
-  // With no selected foods, the visitor may browse the full collection.
-  return state.foods.size === 0 ||
-    (Array.isArray(recipe.wic) && recipe.wic.length > 0 &&
-      recipe.wic.every(group => state.foods.has(group)));
+  // Match recipes that use at least one selected WIC category.
+  // Additional recipe ingredients are allowed and explicitly shown to visitors.
+  // A recipe with no overlap (for example, a peach smoothie when only
+  // grains and fish are selected) must never appear.
+  if (state.foods.size === 0) return true;
+  return Array.isArray(recipe.wic) &&
+    recipe.wic.some(group => state.foods.has(group));
 }
 
 function allowed(recipe) {
@@ -644,7 +645,7 @@ function renderRecipes(shuffle = false) {
     .map(id => WIC_FOODS.find(food => food.id === id)?.name)
     .filter(Boolean);
   $('#resultSummary').textContent = selected.length
-    ? `Showing recipes using only your selected WIC food groups: ${selected.join(', ')}.${state.pantry ? ' Prioritizing recipes with: ' + state.pantry + '.' : ''} Other pantry ingredients may still be needed.`
+    ? `Showing recipes that use your selected WIC foods: ${selected.join(', ')}.${state.pantry ? ' Prioritizing recipes with: ' + state.pantry + '.' : ''} Recipes may need additional ingredients, listed on each card.`
     : `Browse WIC-food recipe ideas.${state.pantry ? ' Prioritizing recipes with: ' + state.pantry + '.' : ''} Choose foods to personalize your matches.`;
   refreshIcons();
 }
@@ -659,7 +660,7 @@ function card(recipe) {
   }).join('');
 
   const matchText = state.foods.size
-    ? `Uses ${recipe.wic.length} of your selected WIC food groups`
+    ? `Matches ${recipe._match} of ${recipe.wic.length} recipe WIC food groups`
     : '';
 
   return `
