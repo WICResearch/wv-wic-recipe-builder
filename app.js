@@ -416,6 +416,8 @@ function reset() {
   });
 
   $('#pantryInput').value = '';
+  $('#recipeSearch').value = '';
+  $('#recipeSort').value = 'best';
 
   $('#moreWic').classList.add('active');
   $('#quickOnly').classList.remove('active');
