@@ -424,6 +424,7 @@ function reset() {
 
   $('#builder').classList.add('hidden');
   $('#hero').classList.remove('hidden');
+  state.step = 1;
 
   window.scrollTo({
     top: 0,
@@ -879,7 +880,7 @@ document.addEventListener('click', event => {
     state.quick = false;
     state.moreWic = true;
     state.visibleCount = 12;
-    $('.choice-card, .pill').forEach(card => {
+    $$('.choice-card, .pill').forEach(card => {
       card.classList.remove('selected');
       card.setAttribute('aria-pressed', 'false');
     });
