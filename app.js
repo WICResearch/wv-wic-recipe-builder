@@ -525,7 +525,7 @@ function totalMinutes(recipe) {
 }
 
 function pantryWords() {
-  // Accept comma-separated ingredients or a simple phrase such as "chicken rice garlic".
+  // Accept comma-separated ingredients and phrases joined by "and".
   // Deduplicate entries so repeated words cannot artificially boost a recipe.
   const entries = state.pantry.toLowerCase().split(/[,;\n]+/)
     .flatMap(part => part.trim().split(/\s+(?:and|&)\s+/))
