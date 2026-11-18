@@ -525,7 +525,13 @@ function totalMinutes(recipe) {
 }
 
 function pantryWords() {
-  return state.pantry.toLowerCase().split(/[,;\n]+/).map(x => x.trim()).filter(x => x.length >= 2);
+  // Accept comma-separated ingredients or a simple phrase such as "chicken rice garlic".
+  // Deduplicate entries so repeated words cannot artificially boost a recipe.
+  const entries = state.pantry.toLowerCase().split(/[,;\n]+/)
+    .flatMap(part => part.trim().split(/\s+(?:and|&)\s+/))
+    .map(part => part.trim())
+    .filter(part => part.length >= 2);
+  return [...new Set(entries)];
 }
 
 function pantryMatches(recipe) {
