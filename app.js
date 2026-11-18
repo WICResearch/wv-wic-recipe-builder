@@ -393,7 +393,7 @@ function go(number) {
   });
 }
 
-function reset() {
+function clearSelections() {
   state.foods.clear();
   state.meal.clear();
   state.audience.clear();
@@ -407,29 +407,35 @@ function reset() {
   state.sort = 'best';
   state.visibleCount = 12;
 
-  $$('.selected').forEach(element => {
+  $$('.choice-card.selected, .pill.selected').forEach(element => {
     element.classList.remove('selected');
-  });
-
-  $$('[aria-pressed="true"]').forEach(element => {
     element.setAttribute('aria-pressed', 'false');
   });
 
-  $('#pantryInput').value = '';
-  $('#recipeSearch').value = '';
-  $('#recipeSort').value = 'best';
+  const pantry = $('#pantryInput');
+  const search = $('#recipeSearch');
+  const sort = $('#recipeSort');
+  if (pantry) pantry.value = '';
+  if (search) search.value = '';
+  if (sort) sort.value = 'best';
+  $('#moreWic')?.classList.add('active');
+  $('#quickOnly')?.classList.remove('active');
+}
 
-  $('#moreWic').classList.add('active');
-  $('#quickOnly').classList.remove('active');
-
+function reset() {
+  clearSelections();
   $('#builder').classList.add('hidden');
   $('#hero').classList.remove('hidden');
   state.step = 1;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  });
+function exploreIdeas() {
+  clearSelections();
+  $('#hero').classList.add('hidden');
+  $('#builder').classList.remove('hidden');
+  go(4);
+  renderRecipes(true);
 }
 
 /* SELECTIONS */
@@ -648,7 +654,7 @@ function renderRecipes(shuffle = false) {
     .map(id => WIC_FOODS.find(food => food.id === id)?.name)
     .filter(Boolean);
   $('#resultSummary').textContent = selected.length
-    ? `Showing recipes that use your selected WIC foods: ${selected.join(', ')}.${state.pantry ? ' Prioritizing recipes with: ' + state.pantry + '.' : ''} Recipes may need additional ingredients, listed on each card.`
+    ? `Showing recipes that use your selected WIC foods: ${selected.join(', ')}.${state.pantry ? ' Prioritizing recipes with: ' + state.pantry + '.' : ''} Other ingredients may be needed; check each recipe.`
     : `Browse WIC-food recipe ideas.${state.pantry ? ' Prioritizing recipes with: ' + state.pantry + '.' : ''} Choose foods to personalize your matches.`;
   refreshIcons();
 }
@@ -867,31 +873,8 @@ document.addEventListener('click', event => {
   }
 
   if (button.id === 'surpriseBtn') {
-    // Explore all ideas without inheriting hidden selections or restrictive filters.
-    state.foods.clear();
-    state.meal.clear();
-    state.audience.clear();
-    state.avoid.clear();
-    state.equipment.clear();
-    state.time = null;
-    state.pantry = '';
-    state.search = '';
-    state.sort = 'best';
-    state.quick = false;
-    state.moreWic = true;
-    state.visibleCount = 12;
-    $$('.choice-card, .pill').forEach(card => {
-      card.classList.remove('selected');
-      card.setAttribute('aria-pressed', 'false');
-    });
-    $('#pantryInput').value = '';
-    $('#recipeSearch').value = '';
-    $('#recipeSort').value = 'best';
-    $('#quickOnly').classList.remove('active');
-    $('#moreWic').classList.add('active');
-    showBuilder();
-    go(4);
-    renderRecipes(true);
+    exploreIdeas();
+    return;
   }
 
   if (button.matches('.choice-card')) {
@@ -928,6 +911,7 @@ document.addEventListener('click', event => {
 
   if (['restartTop', 'restartBottom'].includes(button.id)) {
     reset();
+    return;
   }
 
   if (['editChoices', 'emptyEdit'].includes(button.id)) {
