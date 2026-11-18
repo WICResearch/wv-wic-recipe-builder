@@ -112,7 +112,7 @@ function photoMarkup(recipe, className = 'recipe-photo') {
         alt="${title}"
         class="${className}"
         loading="lazy"
-        onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='${escapeHTML(recipeFallbackImage(recipe))}';}else{this.hidden=true}"
+        onerror="this.hidden=true"
         onload="this.previousElementSibling.hidden=true"
       >
     </div>
@@ -797,6 +797,8 @@ function openRecipe(id) {
       <div class="wic-used">
         ${tags}
       </div>
+
+      ${recipe.source && /^https:\/\//.test(recipe.source) ? `<p class="microcopy"><strong>Recipe source:</strong> <a href="${escapeHTML(recipe.source)}" target="_blank" rel="noopener noreferrer">View original recipe</a></p>` : ''}
 
       <p class="microcopy">
         <strong>Shopping note:</strong>
