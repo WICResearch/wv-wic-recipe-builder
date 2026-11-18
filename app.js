@@ -407,7 +407,7 @@ function reset() {
   state.sort = 'best';
   state.visibleCount = 12;
 
-  $('.selected').forEach(element => {
+  $$('.selected').forEach(element => {
     element.classList.remove('selected');
   });
 
